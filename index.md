@@ -2,6 +2,9 @@
 
 # Missions
 
+[**PDF**](https://firstinspires.blob.core.windows.net/fll/challenge/2025-26/fll-challenge-unearthed-rgr.pdf)
+
+
 ## Mission 01 – Surface Brushing
 
 Difficulty: 2/10
@@ -150,5 +153,6 @@ Start with 6 tokens worth 50 pts. Lose one if robot interrupted outside home. Po
 4. Cannot separate Dual Lock, break mission model
 5. Combined models must be loose/simple for single-motion freeing
 6. No interaction with opposing team’s field or items unless exception. Failed points automatically score for other team
+
 
 
