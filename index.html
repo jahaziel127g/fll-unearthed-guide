@@ -1,514 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>FLL Missions & Team Progress — Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIOGLOW™ 2026 - FLL Challenge | All Missions Guide</title>
+<style>
+  :root{ --green:#1a7f37; --dark:#0d3320; --lime:#d9f99d; --bg:#f6fef7; --card:#ffffff; --accent:#ff9800; --blue:#0ea5e9; --border:#d1d5db; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:#1a1a1a; line-height:1.6}
+  header{background:linear-gradient(135deg, var(--dark) 0%, var(--green) 55%, #2ca87a 100%); color:white; padding:32px 20px; text-align:center; position:relative; overflow:hidden}
+  header::before{content:"🌿"; position:absolute; font-size:180px; opacity:0.08; right:-20px; top:-40px}
+  header h1{font-size:2.2rem; letter-spacing:0.04em}
+  header h1 span{color:var(--lime)}
+  header p{opacity:0.9; margin-top:8px; max-width:750px; margin-left:auto; margin-right:auto}
+  .badge{display:inline-block; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); padding:4px 12px; border-radius:999px; font-size:0.8rem; margin-top:12px; backdrop-filter:blur(4px)}
+  .wrap{max-width:1150px; margin:0 auto; padding:20px}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:20px 0 28px}
+  .stat{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+  .stat b{font-size:1.6rem; color:var(--green); display:block}
+  .stat small{color:#6b7280}
+  .notice{background:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; padding:14px 16px; border-radius:8px; margin:18px 0; font-size:0.92rem}
+  .notice strong{color:#92400e}
+  h2{color:var(--dark); margin:28px 0 12px; font-size:1.5rem; border-left:5px solid var(--green); padding-left:12px}
+  h3{color:var(--green); margin-top:4px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:18px}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,0.07); display:flex; flex-direction:column}
+  .card-head{padding:14px 16px; color:white; display:flex; justify-content:space-between; align-items:center}
+  .card-head .num{font-weight:800; font-size:1.1rem; background:rgba(255,255,255,0.22); padding:4px 10px; border-radius:999px}
+  .card-head .pts{background:white; color:#111; padding:4px 10px; border-radius:999px; font-weight:700; font-size:0.9rem}
+  .card-body{padding:16px; flex:1}
+  .card-body p{font-size:0.93rem; color:#374151; margin:8px 0}
+  .points{width:100%; border-collapse:collapse; margin:10px 0; font-size:0.9rem}
+  .points th{background:#f3f4f6; text-align:left; padding:6px 8px; font-weight:600}
+  .points td{padding:6px 8px; border-top:1px solid #eef2f7}
+  .points td:last-child{text-align:right; font-weight:700; color:var(--green)}
+  .how{background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 12px; margin-top:10px}
+  .how strong{color:var(--dark); font-size:0.88rem; text-transform:uppercase; letter-spacing:0.04em}
+  .how ul{margin:6px 0 0 18px; font-size:0.9rem}
+  .tag{display:inline-block; font-size:0.72rem; padding:3px 8px; border-radius:999px; font-weight:600; margin-right:6px}
+  .tag-bag{background:#e0f2fe; color:#075985}
+  .tag-constraint{background:#fee2e2; color:#991b1b; border:1px solid #fecaca}
+  .tag-dock{background:#fef3c7; color:#92400e; border:1px solid #fde68a}
+  .tag-shared{background:#ede9fe; color:#5b21b6}
+  .legend{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
+  table.scoring{width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+  table.scoring th, table.scoring td{padding:10px 12px; border:1px solid #e5e7eb; text-align:left; font-size:0.9rem}
+  table.scoring th{background:var(--dark); color:white}
+  table.scoring tr:nth-child(even){background:#f9fafb}
+  footer{background:var(--dark); color:#cbd5e1; text-align:center; padding:22px 16px; margin-top:32px; font-size:0.85rem}
+  footer a{color:var(--lime)}
+  .filter-bar{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0}
+  .filter-bar button{padding:7px 14px; border:1px solid var(--border); border-radius:999px; background:white; cursor:pointer; font-weight:600; font-size:0.85rem}
+  .filter-bar button.active{background:var(--green); color:white; border-color:var(--green)}
+  @media(max-width:600px){ header h1{font-size:1.6rem} .grid{grid-template-columns:1fr} }
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    .card { background: rgba(17,24,39,0.65); border: 1px solid rgba(250,204,21,0.07); }
-    /* SVG viewer styles */
-    #svgViewport { width:100%; height:420px; border-radius: 0.5rem; background: #071018; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-    #svgInner { transition: transform 260ms cubic-bezier(.2,.9,.2,1); transform-origin: 0 0; will-change: transform; cursor: grab; }
-    #svgInner.dragging { cursor: grabbing; }
-    /* small helpers */
-    .btn { @apply px-3 py-1 rounded font-semibold; }
-  </style>
+  /* ===== Gallery card ===== */
+  .viewer-card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 4px 14px rgba(0,0,0,0.07)}
+  .viewer-card h3{color:var(--dark); font-size:1.15rem; margin-bottom:6px; display:flex; align-items:center; gap:8px}
+  .viewer-card .sub{color:#6b7280; font-size:0.88rem; margin-bottom:12px}
+  .pill{display:inline-block; font-size:0.7rem; padding:2px 7px; border-radius:999px; background:#f3f4f6; color:#374151; border:1px solid #e5e7eb}
+</style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen font-sans leading-relaxed">
-  <div class="max-w-6xl mx-auto p-6">
+<body>
+<header>
+  <div style="font-size:0.85rem; letter-spacing:0.12em; opacity:0.8">FIRST® LEGO® League Challenge — FIRST® CANOPY™</div>
+  <h1>BIOGLOW™ <span>2026</span></h1>
+  <p>Complete Robot Game Mission Guide — 15 missions • 2.5-minute matches • best of 3 counts • rainforest biodiversity theme</p>
+  <div class="badge">📍 Based on official Robot Game Rulebook (RGR_2026) + Software Scoresheet + Season Overview</div>
+</header>
 
-    <!-- Header -->
-    <header class="mb-8 text-center">
-      <h1 class="text-4xl font-extrabold mb-2 text-amber-400">FLL Missions & Team Progress 2025–26</h1>
-      <a href="https://firstinspires.blob.core.windows.net/fll/challenge/2025-26/fll-challenge-unearthed-rgr.pdf"
-         target="_blank" rel="noopener"
-         class="text-blue-400 hover:text-blue-300 underline font-semibold">
-        Official RGR PDF
-      </a>
-    </header>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-      <!-- Left: Missions & Rules -->
-      <div class="space-y-6 card p-6 rounded-2xl shadow-lg">
-        <h2 class="text-2xl font-semibold text-amber-300 mb-2">Missions</h2>
-
-        <section class="space-y-4 text-gray-200 text-sm">
-          <!-- Full missions content -->
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 01 – Surface Brushing</h3>
-            <p class="italic text-gray-400">Difficulty: 2/10</p>
-            <ul class="list-disc pl-6 mt-2 space-y-1">
-              <li>Soil deposits completely cleared, touching the mat. 10 pts each</li>
-              <li>Archaeologist’s brush not touching the dig site. 10 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 02 – Map Reveal</h3>
-            <p class="italic text-gray-400">Difficulty: 4/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Topsoil sections completely cleared. 10 pts each</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 03 – Mineshaft Explorer</h3>
-            <p class="italic text-gray-400">Difficulty: 5/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Your minecart on opposing team's field: 30 pts</li>
-              <li>Bonus: Opposing team’s minecart on your field: 10 pts</li>
-            </ul>
-            <p class="text-gray-400 text-xs mt-1">Note: Must pass completely through mineshaft entry. Bonus not possible if no opposing team.</p>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 04 – Careful Recovery</h3>
-            <p class="italic text-gray-400">Difficulty: 10/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Precious artifact not touching mine: 30 pts</li>
-              <li>Both support structures standing: 10 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 05 – Who Lived Here?</h3>
-            <p class="italic text-gray-400">Difficulty: 4/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Structure floor upright: 30 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 06 – Forge</h3>
-            <p class="italic text-gray-400">Difficulty: 5/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Ore blocks not touching forge: 10 pts</li>
-            </ul>
-            <p class="text-gray-400 text-xs mt-1">Note: Technicians may open ore blocks by hand in home to reveal fossil (Mission 14)</p>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 07 – Heavy Lifting</h3>
-            <p class="italic text-gray-400">Difficulty: 7/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Millstone no longer touching base: 30 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 08 – Silo</h3>
-            <p class="italic text-gray-400">Difficulty: 6/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Preserved pieces outside silo: 10 pts each</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 09 – What’s on Sale?</h3>
-            <p class="italic text-gray-400">Difficulty: 8/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Roof completely raised: 20 pts</li>
-              <li>Market wares raised: 10 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 10 – Tip the Scales</h3>
-            <p class="italic text-gray-400">Difficulty: 10/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Scale tipped & touching mat: 20 pts</li>
-              <li>Scale pan completely removed: 10 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 11 – Angler Artifacts</h3>
-            <p class="italic text-gray-400">Difficulty: 4/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Artifacts raised above ground: 20 pts</li>
-              <li>Bonus: Crane flag partly lowered: 10 pts</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 12 – Salvage Operation</h3>
-            <p class="italic text-gray-400">Difficulty: 10/10</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Sand completely cleared: 20 pts</li>
-              <li>Ship completely raised: 10 pts</li>
-            </ul>
-            <p class="text-gray-400 text-xs mt-1">Note: Sand cleared when pull activator past line on mat</p>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 13 – Forum</h3>
-            <p class="italic text-gray-400">Difficulty: 10/10</p>
-            <p class="mt-2">Artifacts touching mat & partly in forum (5 pts each):</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Brush</li>
-              <li>Topsoil</li>
-              <li>Precious Artifact</li>
-              <li>Opposing team’s minecart</li>
-              <li>Ore with fossil</li>
-              <li>Millstone</li>
-              <li>Scale pan</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300">Mission 15 – Site Marking</h3>
-            <ul class="list-disc pl-6 mt-2">
-              <li>Sites with flag partly inside & touching mat: 10 pts each</li>
-            </ul>
-            <p class="text-gray-400 text-xs mt-1">Note: Sites outlined on mat wireframe</p>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold text-amber-300 mt-4">Precision Tokens</h3>
-            <p class="text-gray-300 mt-1">Start with 6 tokens worth 50 pts. Lose one if robot interrupted outside home.</p>
-            <ul class="list-disc pl-6 mt-2">
-              <li>6: 50 pts</li>
-              <li>5: 50 pts</li>
-              <li>4: 35 pts</li>
-              <li>3: 25 pts</li>
-              <li>2: 15 pts</li>
-              <li>1: 10 pts</li>
-            </ul>
-          </div>
-
-          <div class="mt-4">
-            <h3 class="text-xl font-bold text-amber-300">Rules (Important)</h3>
-            <h4 class="mt-2 text-amber-200">Before Match</h4>
-            <ol class="list-decimal pl-6 mt-2 space-y-2 text-gray-200">
-              <li>Equipment must fit in 2 launch areas &amp; height ≤ 12 in (305 mm). Single launch area under limit: 20 pts</li>
-              <li>No extra storage. Left/right of mat ~6.75 in x 45 in. Equipment may extend past walls.</li>
-              <li>After inspection, distribute equipment &amp; mission models, place robot in launch area. Use time to adjust &amp; calibrate.</li>
-              <li>Team splits left/right. Cannot switch sides.</li>
-            </ol>
-            <ul class="pl-8 mt-2 space-y-1 text-gray-300">
-              <li>4+ members: 2 techs per home, others stand back</li>
-              <li>3 members: 2 techs one side, 1 other</li>
-              <li>2 members: 1 tech per side</li>
-            </ul>
-          </div>
-        </section>
-      </div>
-
-      <!-- Right: Gallery + SVG viewer -->
-      <div class="space-y-6">
-
-        <!-- Gallery -->
-        <div class="card p-6 rounded-2xl shadow-lg">
-          <h2 class="text-2xl font-semibold text-amber-300 mb-3">Team Progress Gallery</h2>
-          <p class="text-gray-300 text-sm mb-3">Google Drive folder (public view). Pre-filled with your folder ID — change if needed.</p>
-
-          <div class="flex gap-2 mb-4">
-            <input id="driveIdInput" type="text" value="19721zCMLXrOMm4rJ9bE5JQ-VZTuQwU5G"
-                   placeholder="Folder ID or full Drive folder URL"
-                   class="flex-1 p-2 rounded bg-gray-800 placeholder-gray-400 text-gray-100">
-            <button id="setDriveBtn" class="px-4 py-2 bg-amber-400 text-gray-900 rounded font-semibold hover:bg-amber-500">Load</button>
-          </div>
-
-          <div id="galleryWrap" class="rounded-xl overflow-hidden border border-amber-400">
-            <iframe src="https://drive.google.com/embeddedfolderview?id=19721zCMLXrOMm4rJ9bE5JQ-VZTuQwU5G#grid"
-                    class="w-full h-[420px]" frameborder="0" allow="autoplay"></iframe>
-          </div>
-
-          <p class="text-gray-400 text-xs mt-3">Tip: Use 'Anyone with the link → Viewer' on the Drive folder.</p>
-        </div>
-
-        <!-- SVG viewer -->
-        <div class="card p-6 rounded-2xl shadow-lg">
-          <h2 class="text-2xl font-semibold text-amber-300 mb-3">SVG Viewer (live from GitHub)</h2>
-          <p class="text-gray-300 text-sm mb-3">Raw GitHub SVG URL (pre-filled). Updating the file in GitHub updates this view. Use the refresh button if cached.</p>
-
-          <div class="flex gap-2 mb-3">
-            <input id="svgUrl" type="text"
-                   value="https://raw.githubusercontent.com/jahaziel127g/fll-unearthed/main/icon.svg"
-                   class="flex-1 p-2 rounded bg-gray-800 placeholder-gray-400 text-gray-100" />
-            <button id="loadSvg" class="px-4 py-2 bg-amber-400 text-gray-900 rounded font-semibold hover:bg-amber-500">Load</button>
-          </div>
-
-          <div class="flex items-center gap-2 mb-3">
-            <button id="zoomOut" class="btn bg-gray-700 hover:bg-gray-600 text-gray-100">-</button>
-            <input id="zoomRange" type="range" min="0.2" max="3" step="0.05" value="1" class="w-full"/>
-            <button id="zoomIn" class="btn bg-gray-700 hover:bg-gray-600 text-gray-100">+</button>
-
-            <button id="fitBtn" class="ml-2 px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">Fit</button>
-            <button id="resetBtn" class="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">Reset</button>
-            <button id="refreshBtn" class="ml-2 px-3 py-1 bg-amber-400 text-gray-900 rounded hover:bg-amber-500">Refresh</button>
-          </div>
-
-          <div class="flex items-center gap-3 text-xs text-gray-400 mb-3">
-            <label class="flex items-center gap-2">
-              <input id="autoRefresh" type="checkbox" /> Auto-refresh (30s)
-            </label>
-            <span id="svgStatus" class="ml-2">Idle</span>
-            <a id="downloadSvg" class="ml-auto text-amber-300 underline cursor-pointer">Download SVG</a>
-          </div>
-
-          <div id="svgViewport" class="rounded-xl">
-            <div id="svgInner" role="img" aria-label="SVG preview">
-              <div class="text-gray-500">SVG not loaded yet.</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <footer class="mt-10 text-center text-gray-400 text-xs">
-      Built for your FLL team — everything runs client-side in your browser.
-    </footer>
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><b>15</b><small>Missions</small></div>
+    <div class="stat"><b>2.5 min</b><small>Per Match</small></div>
+    <div class="stat"><b>~520</b><small>Max Points (with bonuses)</small></div>
+    <div class="stat"><b>3</b><small>Matches — Best Counts</small></div>
+    <div class="stat"><b>20 + 50</b><small>Inspection + Precision</small></div>
   </div>
 
-  <!-- Behavior script -->
-  <script>
-    // Utils: sanitize simple SVG text (remove script tags and on* attributes)
-    function sanitizeSvgText(svgText) {
-      // remove <script>...</script>
-      svgText = svgText.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
-      // remove on... attributes (inline event handlers)
-      svgText = svgText.replace(/\son[a-zA-Z]+\s*=\s*"[^"]*"/gi, '');
-      svgText = svgText.replace(/\son[a-zA-Z]+\s*=\s*'[^']*'/gi, '');
-      // remove javascript: URIs
-      svgText = svgText.replace(/javascript:/gi, '');
-      return svgText;
-    }
+  <div class="notice">
+    <strong>⚠️ How scoring works:</strong> Mission requirements must be <em>visibly met at the end of the match</em> unless stated otherwise (RGR p18 Rule 22). Only your highest of 3 official matches counts (ties broken by 2nd/3rd best). Gracious Professionalism® is scored separately (3 = ACCOMPLISHED default, 2 = DEVELOPING, 4 = EXCEEDS).
+  </div>
 
-    // --- SVG loader & viewer with pan & zoom ---
-    const svgUrlInput = document.getElementById('svgUrl');
-    const loadSvgBtn = document.getElementById('loadSvg');
-    const svgInner = document.getElementById('svgInner');
-    const svgViewport = document.getElementById('svgViewport');
-    const statusEl = document.getElementById('svgStatus');
-    const downloadLink = document.getElementById('downloadSvg');
+  <h2>Scoring at a Glance</h2>
+  <table class="scoring">
+    <tr><th>Mission</th><th>Base</th><th>Bonus</th><th>Max</th><th>Bags</th></tr>
+    <tr><td>00 Equipment Inspection</td><td>20</td><td>—</td><td><b>20</b></td><td>—</td></tr>
+    <tr><td>00 Precision Tokens (6 → 50)</td><td>50</td><td>—</td><td><b>50</b></td><td>—</td></tr>
+    <tr><td>01 Drone Survey</td><td>20</td><td>+10</td><td><b>30</b></td><td>1,2</td></tr>
+    <tr><td>02 Exploding Seeds (3 seeds ×10)</td><td>30</td><td>—</td><td><b>30</b></td><td>3</td></tr>
+    <tr><td>03 Flip the Rock</td><td>20</td><td>+10</td><td><b>30</b></td><td>4,5</td></tr>
+    <tr><td>04 Lucky Leaves</td><td>10</td><td>+20</td><td><b>30</b></td><td>6</td></tr>
+    <tr><td>05 Reaching Roots</td><td>10 / 20</td><td>—</td><td><b>20</b></td><td>7</td></tr>
+    <tr><td>06 Leafcutter Frenzy (4 frag. ×10)</td><td>40</td><td>—</td><td><b>40</b></td><td>8,9,10</td></tr>
+    <tr><td>07 Humongous Fungus</td><td>20</td><td>+10 coop</td><td><b>30</b></td><td>10</td></tr>
+    <tr><td>08 Tangled</td><td>30</td><td>—</td><td><b>30</b></td><td>11-15</td></tr>
+    <tr><td>09 Research Platform (10+10+10)</td><td>30</td><td>—</td><td><b>30</b></td><td>11-15</td></tr>
+    <tr><td>10 Fragile Microhabitats (10+10)</td><td>20</td><td>—</td><td><b>20</b></td><td>16</td></tr>
+    <tr><td>11 Window to the Past</td><td>20</td><td>—</td><td><b>20</b></td><td>17</td></tr>
+    <tr><td>12 Forest Elder (20+10)</td><td>30</td><td>—</td><td><b>30</b></td><td>18</td></tr>
+    <tr><td>13 Keystone Species</td><td>30</td><td>—</td><td><b>30</b></td><td>19,20</td></tr>
+    <tr><td>14 Seeds of Renewal (4×5 +4×5)</td><td>20</td><td>+20</td><td><b>40</b></td><td>21</td></tr>
+    <tr><td>15 Biocentric Architecture (10+10+10)</td><td>30</td><td>+10</td><td><b>40</b></td><td>22-24</td></tr>
+    <tr style="background:#d1fae5; font-weight:800"><td colspan="3" style="text-align:right">THEORETICAL MAX (solo, no coop) </td><td><b>510</b></td><td></td></tr>
+    <tr style="background:#fef3c7; font-weight:800"><td colspan="3" style="text-align:right">MAX WITH COOP BONUS (M07 shared) </td><td><b>520</b></td><td></td></tr>
+  </table>
 
-    let scale = 1;
-    let tx = 0, ty = 0;
-    let isDragging = false;
-    let dragStart = null;
-    let svgOriginalWidth = null, svgOriginalHeight = null;
-    let currentSvgText = '';
+  <div class="legend">
+    <span class="tag tag-constraint">🚫 No Equipment Constraint</span>
+    <span class="tag tag-dock">🔀 Interchangeable Dock (13-15)</span>
+    <span class="tag tag-shared">🤝 Shared Field / Coop</span>
+  </div>
 
-    const zoomRange = document.getElementById('zoomRange');
-    const zoomInBtn = document.getElementById('zoomIn');
-    const zoomOutBtn = document.getElementById('zoomOut');
-    const fitBtn = document.getElementById('fitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const refreshBtn = document.getElementById('refreshBtn');
-    const autoRefreshCheckbox = document.getElementById('autoRefresh');
+  <div class="notice">
+    <strong>🔀 New this year — Interchangeable Docks:</strong> Missions 13-15 each sit on a dock (Mine / City / Farm). Before the match, <em>your team chooses which dock gets which model</em> — this determines the Environmental Bonus for Mission 15 and is part of strategy (RGR p7).
+    <br><strong>🚫 No Equipment Constraint:</strong> When shown on a mission card, that mission model cannot score if touching equipment at end of match. Applies per-mission only.
+  </div>
 
-    function applyTransform() {
-      svgInner.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    }
+  <div class="filter-bar">
+    <button class="active" onclick="filterMissions('all',this)">All</button>
+    <button onclick="filterMissions('easy',this)">Easy (push/pull)</button>
+    <button onclick="filterMissions('dock',this)">Dock Missions</button>
+    <button onclick="filterMissions('coop',this)">Coop</button>
+  </div>
 
-    function setStatus(s) { statusEl.textContent = s; }
+<h2>🎯 Inspection & Precision — Every Match</h2>
+<div class="grid">
+  <div class="card" style="border-top:4px solid #0ea5e9">
+    <div class="card-head" style="background:#0ea5e9"><span class="num">00</span> Equipment Inspection <span class="pts">20 pts</span></div>
+    <div class="card-body">
+      <p><span class="tag tag-bag">Pre-match</span> Referee checks that <b>robot + all equipment fits completely in ONE launch area</b> and under <b>12 in (305 mm)</b> height.</p>
+      <table class="points"><tr><th>Condition</th><th>Pts</th></tr><tr><td>Fits in one launch area, under height</td><td>20</td></tr><tr><td>Otherwise</td><td>0</td></tr></table>
+      <div class="how"><strong>How to solve:</strong><ul><li>Design compact robot + stack attachments vertically but under 12in.</li><li>Test with a cardboard gauge box.</li><li>You still start with equipment split across two launch areas — the 20pts is just for passing the one-area check.</li></ul></div>
+    </div>
+  </div>
+  <div class="card" style="border-top:4px solid #0ea5e9">
+    <div class="card-head" style="background:#0ea5e9"><span class="num">00</span> Precision Tokens <span class="pts">50 pts max</span></div>
+    <div class="card-body">
+      <p>You start with <b>6 tokens = 50 pts</b>. Each time you <b>interrupt the robot outside Home</b>, referee removes 1 token.</p>
+      <table class="points"><tr><th>Tokens left</th><th>Pts</th></tr><tr><td>6</td><td>50</td></tr><tr><td>5</td><td>50</td></tr><tr><td>4</td><td>35</td></tr><tr><td>3</td><td>25</td></tr><tr><td>2</td><td>15</td></tr><tr><td>1</td><td>10</td></tr><tr><td>0</td><td>0</td></tr></table>
+      <div class="how"><strong>How to keep them:</strong><ul><li>Only interrupt when robot + anything it touches is fully in Home.</li><li>If you <em>stop</em> robot without relaunching, no token lost — it stays where interrupted.</li><li>Design reliable programs > risky grabs.</li></ul></div>
+    </div>
+  </div>
+</div>
 
-    async function fetchAndShowSvg(cacheBust=false) {
-      const url = svgUrlInput.value.trim();
-      if (!url) { svgInner.innerHTML = '<div class="text-red-400">No URL</div>'; return; }
-      setStatus('Loading…');
-      try {
-        const fetchUrl = cacheBust ? (url + (url.includes('?') ? '&' : '?') + 'cb=' + Date.now()) : url;
-        const res = await fetch(fetchUrl);
-        if (!res.ok) throw new Error('Network response not ok');
-        let text = await res.text();
-        text = sanitizeSvgText(text);
+<h2>🌳 All 15 Missions — Detail</h2>
+<div class="grid" id="missionGrid">
 
-        // ensure svg has width/height or viewBox; if missing, wrap into a <svg> — but usually present
-        // add class for responsive scaling
-        // Insert class attribute safely: replace first <svg... with adding class if not present
-        text = text.replace(/<svg([^>]*?)>/i, (m, attrs) => {
-          if (/class=/.test(attrs)) return `<svg${attrs}>`;
-          return `<svg${attrs} class="w-full h-auto">`;
-        });
+  <div class="card" data-cat="easy" style="border-top:4px solid #1a7f37">
+    <div class="card-head" style="background:#1a7f37"><span class="num">01</span> Drone Survey <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 1, 2</span> <p><b>Story:</b> Launch drone high above canopy to create LiDAR map.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Drone no longer touching mat</td><td>20</td></tr><tr><td><b>Bonus:</b> LiDAR map completely flipped, scan marker at least partly in survey area</td><td>+10</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Push/launch bar to flick drone off mat.</li><li>Second mechanism (arm/lever) flips LiDAR map tile over.</li><li>Map must land with scan marker in survey circle — low friction; aim for a controlled flip, not a smash.</li><li>Easy starter mission — close to launch area.</li></ul></div>
+    </div>
+  </div>
 
-        // place inline
-        svgInner.innerHTML = text;
-        currentSvgText = text;
+  <div class="card" data-cat="easy" style="border-top:4px solid #65a30d">
+    <div class="card-head" style="background:#65a30d"><span class="num">02</span> Exploding Seeds <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 3</span> <p><b>Story:</b> Unique trees propel seeds to new ground.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Each seed no longer touching stalk (×3)</td><td>10 each</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Hit/bump seed pod to release seeds — push, pull or quick tap.</li><li>Seeds are loose; ensure they scatter off the stalk model.</li><li>Reliable: drive into model and reverse.</li></ul></div>
+    </div>
+  </div>
 
-        // try to read natural svg size for fit
-        const insertedSvg = svgInner.querySelector('svg');
-        if (insertedSvg) {
-          const vb = insertedSvg.getAttribute('viewBox');
-          if (vb) {
-            const parts = vb.split(/\s+/).map(Number);
-            if (parts.length === 4) {
-              svgOriginalWidth = parts[2]; svgOriginalHeight = parts[3];
-            }
-          } else {
-            // fallback to width/height attrs
-            svgOriginalWidth = parseFloat(insertedSvg.getAttribute('width')) || null;
-            svgOriginalHeight = parseFloat(insertedSvg.getAttribute('height')) || null;
-          }
-        }
+  <div class="card" style="border-top:4px solid #a16207">
+    <div class="card-head" style="background:#a16207"><span class="num">03</span> Flip the Rock <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 4, 5</span> <p><b>Story:</b> Discover creatures living underneath; leave no trace.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Research flag down</td><td>20</td></tr><tr><td><b>Bonus:</b> Rock returned to original starting position</td><td>+10</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Mechanism to flip or push rock over to reveal flag, then push flag down.</li><li>For bonus, push rock back — needs precise reverse or second arm.</li><li>Too fast = flag not staying down. Controlled push is key.</li></ul></div>
+    </div>
+  </div>
 
-        // reset transforms and fit initial
-        scale = 1; tx = 0; ty = 0; zoomRange.value = scale;
-        applyTransform();
+  <div class="card" data-cat="easy" style="border-top:4px solid #15803d">
+    <div class="card-head" style="background:#15803d"><span class="num">04</span> Lucky Leaves <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 6</span> <span class="tag tag-constraint">🚫 No Equipment Touch end</span>
+      <p><b>Story:</b> Katydid camouflages with leaves — collect leaves without disturbing it.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>One leaf completely removed, not touching nest</td><td>10</td></tr><tr><td><b>Bonus:</b> Second leaf also removed + katydid still in original start pos.</td><td>+20 (total 30)</td></tr></table>
+      <p style="font-size:0.82rem; color:#991b1b; background:#fef2f2; padding:6px 8px; border-radius:6px; margin-top:8px">⚠️ If katydid is outside leaf habitat (nest + marked mat area) at end — even partly — <b>whole mission scores 0</b>. If katydid ever completely removed during match, bonus unavailable.</p>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Gentle fork/rake attachment to slide leaves out sideways.</li><li>Must NOT knock katydid — slow, low force.</li><li>Novice tip: go for 1 leaf (10pts) safely rather than risking katydid.</li></ul></div>
+    </div>
+  </div>
 
-        // set download link to raw URL
-        downloadLink.onclick = () => {
-          // download the current fetched svg as file
-          const blob = new Blob([currentSvgText], {type:'image/svg+xml'});
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = (new URL(url)).pathname.split('/').pop() || 'icon.svg';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        };
+  <div class="card" style="border-top:4px solid #047857">
+    <div class="card-head" style="background:#047857"><span class="num">05</span> Reaching Roots <span class="pts">20 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 7</span> <span class="tag tag-shared">🤝 Coop-related</span>
+      <p><b>Story:</b> Plant stretches roots across forest boundary for symbiosis.</p>
+      <table class="points"><tr><th>Scoring (only one)</th><th>Pts</th></tr><tr><td>Plant root partially extended</td><td>10</td></tr><tr><td>Plant root completely extended</td><td>20</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Push/pull slider to extend root across line.</li><li>Must fully extend for 20pts — check that model clicks/locks.</li><li>Pairs with M07 Humongous Fungus for shared bonus (see M07).</li></ul></div>
+    </div>
+  </div>
 
-        setStatus('Loaded');
-      } catch (err) {
-        console.error(err);
-        svgInner.innerHTML = '<div class="text-red-400">Error loading SVG.</div>';
-        setStatus('Error');
-      }
-    }
+  <div class="card" style="border-top:4px solid #65a30d">
+    <div class="card-head" style="background:#65a30d"><span class="num">06</span> Leafcutter Frenzy <span class="pts">40 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 8,9,10</span> <p><b>Story:</b> Guide ants back to nest with leaf fragments.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Each leaf fragment contained in nest <b>with ant touching nest</b> (×4)</td><td>10 each</td></tr></table>
+      <p style="font-size:0.82rem; color:#6b7280; margin-top:6px">Fragments count only if ant is touching nest at end. Up to 4 fragments.</p>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Push ant model toward nest; collect fragments and drop/spill them inside.</li><li>Attachment with tray or plow to sweep fragments without scattering.</li><li>Move too fast = fragments scatter — go slow, steady push.</li></ul></div>
+    </div>
+  </div>
 
-    loadSvgBtn.addEventListener('click', () => fetchAndShowSvg(false));
-    refreshBtn.addEventListener('click', () => fetchAndShowSvg(true));
+  <div class="card" data-cat="coop" style="border-top:4px solid #6d28d9">
+    <div class="card-head" style="background:#6d28d9"><span class="num">07</span> Humongous Fungus <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 10</span> <span class="tag tag-shared">🤝 Coop — needs opponent</span>
+      <p><b>Story:</b> Mycelium network connects to neighboring tree root.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Mycelium completely extended</td><td>20</td></tr><tr><td><b>Bonus:</b> Connection formed with opponent’s fully extended plant root (M05). Both teams get bonus if both fully extended. Not possible in remote/no opponent.</td><td>+10</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Pull/slide to extend mycelium — simple linear action.</li><li>Coordinate pre-match with opponent? Both need full extension for bonus — friendly coopetition.</li><li>Models don’t need to touch — just both fully extended = connection.</li></ul></div>
+    </div>
+  </div>
 
-    // zoom controls
-    zoomRange.addEventListener('input', (e) => {
-      scale = parseFloat(e.target.value);
-      applyTransform();
-    });
-    zoomInBtn.addEventListener('click', () => {
-      scale = Math.min(3, +(scale + 0.1).toFixed(2));
-      zoomRange.value = scale;
-      applyTransform();
-    });
-    zoomOutBtn.addEventListener('click', () => {
-      scale = Math.max(0.2, +(scale - 0.1).toFixed(2));
-      zoomRange.value = scale;
-      applyTransform();
-    });
+  <div class="card" style="border-top:4px solid #a16207">
+    <div class="card-head" style="background:#a16207"><span class="num">08</span> Tangled <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 11-15</span> <p><b>Story:</b> Climbing vines wrapped tightly around tree — untangle.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Vine touching the mat (fully unwrapped)</td><td>30</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Hook and pull vine down until it lies on mat.</li><li>Needs decent pull force — gear down or use leverage arm.</li><li>One quick pull often does it; practice to avoid tangling robot after.</li></ul></div>
+    </div>
+  </div>
 
-    // fit to container: attempt to compute bounding box of SVG and scale to fit
-    fitBtn.addEventListener('click', () => {
-      const svg = svgInner.querySelector('svg');
-      if (!svg) return;
-      const vb = svg.getAttribute('viewBox');
-      let w, h;
-      if (vb) {
-        const parts = vb.split(/\s+/).map(Number);
-        w = parts[2]; h = parts[3];
-      } else {
-        w = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width || svg.getBoundingClientRect().width;
-        h = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.height || svg.getBoundingClientRect().height;
-      }
-      const vw = svgViewport.clientWidth - 20; // padding
-      const vh = svgViewport.clientHeight - 20;
-      if (!w || !h) return;
-      const s = Math.min(vw / w, vh / h);
-      scale = Math.max(0.2, Math.min(3, s));
-      tx = (vw - w * scale) / 2 - 10;
-      ty = (vh - h * scale) / 2 - 10;
-      zoomRange.value = scale;
-      applyTransform();
-    });
+  <div class="card" style="border-top:4px solid #0e7490">
+    <div class="card-head" style="background:#0e7490"><span class="num">09</span> Research Platform <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 11-15</span> <p><b>Story:</b> Canopy research — Olivia & Michael deploy equipment.</p>
+      <table class="points"><tr><th>Scoring (each independent)</th><th>Pts</th></tr><tr><td>Research platform raised</td><td>10</td></tr><tr><td>Camera trap deployed</td><td>10</td></tr><tr><td>Seed no longer touching tree</td><td>10</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Lift platform with upward push, flip/extend camera trap arm, flick seed off tree.</li><li>Three separate mechanisms but can be done with one drive-through with multi-arm attachment.</li><li>Do in one run to save time.</li></ul></div>
+    </div>
+  </div>
 
-    // reset
-    resetBtn.addEventListener('click', () => {
-      scale = 1; tx = 0; ty = 0; zoomRange.value = scale; applyTransform();
-    });
+  <div class="card" style="border-top:4px solid #44403c">
+    <div class="card-head" style="background:#44403c"><span class="num">10</span> Fragile Microhabitats <span class="pts">20 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 16</span> <span class="tag tag-constraint">Precision matters</span>
+      <p><b>Story:</b> Move through area without damaging tiny creatures’ homes.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Spider habitat still in original start position</td><td>10</td></tr><tr><td>Snail habitat still in original start position</td><td>10</td></tr></table>
+      <p style="font-size:0.82rem; color:#065f46; background:#ecfdf5; padding:6px 8px; border-radius:6px; margin-top:8px">You score by <b>NOT</b> disturbing them. Navigate around/through without bumping.</p>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Careful navigation — line-follow or gyro straight drives through corridor.</li><li>Narrow gap mission — practice slow speed, accurate odometry.</li><li>Score is 20 if untouched; crash = 0/10.</li></ul></div>
+    </div>
+  </div>
 
-    // pan (drag)
-    svgInner.addEventListener('pointerdown', (e) => {
-      isDragging = true;
-      svgInner.classList.add('dragging');
-      dragStart = { x: e.clientX, y: e.clientY, tx, ty };
-      svgInner.setPointerCapture(e.pointerId);
-    });
-    svgInner.addEventListener('pointermove', (e) => {
-      if (!isDragging || !dragStart) return;
-      const dx = e.clientX - dragStart.x;
-      const dy = e.clientY - dragStart.y;
-      tx = dragStart.tx + dx;
-      ty = dragStart.ty + dy;
-      applyTransform();
-    });
-    svgInner.addEventListener('pointerup', (e) => {
-      isDragging = false;
-      svgInner.classList.remove('dragging');
-      try { svgInner.releasePointerCapture(e.pointerId); } catch {}
-    });
-    svgInner.addEventListener('pointercancel', () => { isDragging=false; svgInner.classList.remove('dragging'); });
+  <div class="card" style="border-top:4px solid #7c3aed">
+    <div class="card-head" style="background:#7c3aed"><span class="num">11</span> Window to the Past <span class="pts">20 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 17</span> <p><b>Story:</b> Open root window and document history.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Root cover down, touching the mat</td><td>20</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Flip/drop root cover down to mat — push top edge or pull lever.</li><li>Must stay touching mat at end; Dual Lock release can be sticky — add weight or push fully.</li></ul></div>
+    </div>
+  </div>
 
-    // wheel for zoom (ctrl+wheel or wheel+alt) — scale around cursor
-    svgViewport.addEventListener('wheel', (e) => {
-      if (!svgInner.querySelector('svg')) return;
-      // prefer ctrlKey for zoom, else use wheel with alt/shift
-      const doZoom = e.ctrlKey || e.altKey || e.shiftKey;
-      if (!doZoom) return;
-      e.preventDefault();
-      const delta = -e.deltaY;
-      const factor = delta > 0 ? 1.08 : 0.92;
-      // compute pointer in svgInner coords
-      const rect = svgInner.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
-      // update scale and translate so zoom centers on pointer
-      const newScale = Math.min(3, Math.max(0.2, +(scale * factor).toFixed(3)));
-      const ratio = newScale / scale;
-      // Translate to keep point under cursor fixed
-      tx = px - ratio * (px - tx);
-      ty = py - ratio * (py - ty);
-      scale = newScale;
-      zoomRange.value = scale;
-      applyTransform();
-    }, { passive: false });
+  <div class="card" style="border-top:4px solid #92400e">
+    <div class="card-head" style="background:#92400e"><span class="num">12</span> Forest Elder <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 18</span> <p><b>Story:</b> Aging giant tree needs support to stay upright.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Cane completely raised, touching tree</td><td>20</td></tr><tr><td>Support tie around the post</td><td>10</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Lift cane vertically until it locks against tree (crank or lift arm).</li><li>Second action: wrap/place support tie around post — hook and loop.</li><li>Two-step mission — good for attachment with two functions.</li></ul></div>
+    </div>
+  </div>
 
-    // Auto-refresh
-    let autoRefreshHandle = null;
-    autoRefreshCheckbox.addEventListener('change', () => {
-      if (autoRefreshCheckbox.checked) {
-        autoRefreshHandle = setInterval(() => fetchAndShowSvg(true), 30_000);
-        setStatus('Auto-refresh ON');
-      } else {
-        clearInterval(autoRefreshHandle);
-        autoRefreshHandle = null;
-        setStatus('Auto-refresh OFF');
-      }
-    });
+  <div class="card" data-cat="dock" style="border-top:4px solid #be123c">
+    <div class="card-head" style="background:#be123c"><span class="num">13</span> Keystone Species <span class="pts">30 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 19,20</span> <span class="tag tag-dock">🔀 Dock: Mine/City/Farm</span> <span class="tag tag-constraint">🚫 Build required</span>
+      <p><b>Story:</b> Build and deliver a keystone species to newly protected habitat.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Your built keystone species on restoration platform, young trees raised</td><td>30</td></tr></table>
+      <p style="font-size:0.82rem; background:#fef2f2; padding:6px 8px; border-radius:6px; margin-top:8px">You must <b>build</b> the species from Bag 20 bricks. It counts as equipment — inspected pre-match. Teams identify their species at inspection.</p>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Carry custom model from Home, place securely on restoration platform, then trigger trees to raise (lever/platform).</li><li>Model must stay on platform at end without equipment touching (if constraint applies).</li><li>Place gently — if trees don’t raise, no points.</li></ul></div>
+    </div>
+  </div>
 
-    // initial load
-    fetchAndShowSvg(false);
+  <div class="card" data-cat="dock" style="border-top:4px solid #65a30d">
+    <div class="card-head" style="background:#65a30d"><span class="num">14</span> Seeds of Renewal <span class="pts">40 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bag 21</span> <span class="tag tag-dock">🔀 Dock: Mine/City/Farm</span>
+      <p><b>Story:</b> Plant diversity — place collected seeds in soil.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Each seed contained within replantation station (×4)</td><td>5 each</td></tr><tr><td><b>Bonus:</b> Each of those seeds also touching mat</td><td>+5 each</td></tr></table>
+      <p style="font-size:0.82rem; color:#6b7280">4 seeds max → 20 + 20 bonus = 40.</p>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Collect seeds from other missions (e.g., M02 / M09) and deliver to station.</li><li>Drop seeds through funnel so they fall into station and touch mat below.</li><li>Reliable funnel tray works best — don’t just dump from height.</li></ul></div>
+    </div>
+  </div>
 
-    // --- Drive gallery loader (keeps the existing behavior) ---
-    const driveIdInput = document.getElementById('driveIdInput');
-    const setDriveBtn = document.getElementById('setDriveBtn');
-    const galleryWrap = document.getElementById('galleryWrap');
-    function extractDriveId(value) {
-      if (!value) return '';
-      const m = value.match(/folders\/([a-zA-Z0-9_-]+)/);
-      if (m) return m[1];
-      if (/^[a-zA-Z0-9_-]+$/.test(value)) return value;
-      return '';
-    }
-    setDriveBtn.addEventListener('click', () => {
-      const raw = driveIdInput.value.trim();
-      const id = extractDriveId(raw);
-      if (!id) {
-        galleryWrap.innerHTML = '<div class="w-full h-[200px] flex items-center justify-center text-red-400">Invalid Drive folder ID or URL.</div>';
-        return;
-      }
-      galleryWrap.innerHTML = '';
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://drive.google.com/embeddedfolderview?id=${encodeURIComponent(id)}#grid`;
-      iframe.className = 'w-full h-[420px]';
-      iframe.frameBorder = '0';
-      iframe.allow = 'autoplay';
-      galleryWrap.appendChild(iframe);
-    });
-  </script>
+  <div class="card" data-cat="dock" style="border-top:4px solid #0f766e">
+    <div class="card-head" style="background:#0f766e"><span class="num">15</span> Biocentric Architecture <span class="pts">40 pts</span></div>
+    <div class="card-body">
+      <span class="tag tag-bag">Bags 22,23,24</span> <span class="tag tag-dock">🔀 Dock — Environmental Bonus</span>
+      <p><b>Story:</b> Modify building for wildlife homes, soil, light.</p>
+      <table class="points"><tr><th>Scoring</th><th>Pts</th></tr><tr><td>Nesting canopy raised</td><td>10</td></tr><tr><td>Garden skylight completely in</td><td>10</td></tr><tr><td>Compost hatch completely opened, touching mat</td><td>10</td></tr><tr><td><b>Environmental Bonus:</b> Complete greatest need for its dock — Mine: canopy / City: skylight / Farm: hatch (only ONE bonus possible)</td><td>+10</td></tr></table>
+      <div class="how"><strong>How it’s made to be solved:</strong><ul><li>Lift canopy, push skylight fully into slot (click), flip hatch down to mat.</li><li>Strategy: place this model on the dock where you plan to do its matching task for the bonus.</li><li>Up to 40pts if you place wisely — e.g., Farm dock → focus on hatch.</li></ul></div>
+    </div>
+  </div>
+
+</div>
+
+<h2>🧭 Strategy Tips</h2>
+<div class="grid">
+  <div class="card" style="padding:16px; background:#fff; border-left:4px solid var(--green)">
+    <h3>For Beginners (aim 120-200 pts)</h3>
+    <p>Focus on 5-6 easy reliable missions: <b>01 Drone (30) + 02 Seeds (30) + 08 Tangled (30) + 11 Window (20) + 05 Roots (20) + 10 Microhabitats (20) + Inspection (20) + keep 5 tokens (50)</b> = ~220 without rush.</p>
+    <p>Use SPIKE app Guided Mission (Competition Ready Unit) as starting program.</p>
+  </div>
+  <div class="card" style="padding:16px; background:#fff; border-left:4px solid #f59e0b">
+    <h3>For Advanced (aim 350+ pts)</h3>
+    <p>Chain missions by location: Run 1 (north): 08+09+05+07. Run 2 (south): 03+04+06. Run 3 (docks): 13+14+15. Keep all 6 tokens. Master funnel for M14 and gentle rake for M04.</p>
+    <p>Don’t forget the dock placement — decide Mine/City/Farm <em>before</em> match (RGR p7).</p>
+  </div>
+  <div class="card" style="padding:16px; background:#fff; border-left:4px solid #0ea5e9">
+    <h3>Rules to Remember</h3>
+    <ul style="margin-left:18px; font-size:0.9rem">
+      <li>Robot is autonomous outside Home — no remote.</li>
+      <li>Launch: robot + anything it’ll move must fit completely inside launch area.</li>
+      <li>Never hand anything between left/right Home by hand (RGR Rule 14).</li>
+      <li>Don’t separate Dual Lock or break models — zero points.</li>
+      <li>End of match: stop robot, hands off — scoring starts.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="viewer-card" style="margin-top:18px">
+  <h3>🖼️ Team Progress Gallery <span class="pill">Google Drive</span></h3>
+  <p class="sub">Public Drive folder — must be <b>Anyone with link → Viewer</b>. If iframe is blank/sign-in, click Open in Drive.</p>
+  <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap">
+    <input id="driveIdInput" type="text" value="16n5A4Vbl27I6NQG53CkWnjeV83sIUuKk" placeholder="Folder ID or full Drive URL" style="flex:1; min-width:220px; padding:8px 10px; border:1px solid var(--border); border-radius:8px; font-size:0.85rem">
+    <button id="setDriveBtn" style="padding:8px 14px; background:var(--green); color:white; border:1px solid var(--green); border-radius:8px; font-weight:600; cursor:pointer">Load</button>
+    <a id="driveOpenBtn" href="https://drive.google.com/drive/folders/16n5A4Vbl27I6NQG53CkWnjeV83sIUuKk?usp=sharing" target="_blank" rel="noopener" style="padding:8px 14px; background:white; color:var(--green); border:1px solid var(--green); border-radius:8px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center">Open in Drive ↗</a>
+  </div>
+  <div style="font-size:0.82rem; margin-bottom:8px; word-break:break-all">Direct link: <a id="driveDirectLink" href="https://drive.google.com/drive/folders/16n5A4Vbl27I6NQG53CkWnjeV83sIUuKk?usp=sharing" target="_blank" rel="noopener" style="color:var(--green); text-decoration:underline">https://drive.google.com/drive/folders/16n5A4Vbl27I6NQG53CkWnjeV83sIUuKk</a> <span style="color:#6b7280">— set to Anyone with link</span></div>
+  <div id="galleryWrap" style="border-radius:10px; overflow:hidden; border:1px solid var(--border); background:white">
+    <iframe src="https://drive.google.com/embeddedfolderview?id=16n5A4Vbl27I6NQG53CkWnjeV83sIUuKk#grid" style="width:100%; height:420px; border:0; display:block" loading="lazy" referrerpolicy="no-referrer"></iframe>
+  </div>
+  <p style="font-size:0.78rem; color:#6b7280; margin-top:8px">Tip: If iframe stays blank, the folder is not public. In Drive: Right-click folder → Share → General access → Anyone with link → Viewer.</p>
+</div>
+
+</div> <!-- /wrap -->
+
+<footer>
+  Built for your FLL team.
+  <br>Official RGR (BIOGLOW 2026): <a href="https://www.flluae.org/assets/downloads/6.%20fll-challenge-bioglow-en%20(1).pdf" target="_blank" rel="noopener">flluae.org — 6. fll-challenge-bioglow-en (EN/RGR, 32p)</a>
+</footer>
+
+<script>
+// ===== MISSION FILTER =====
+function filterMissions(cat, btn){
+  document.querySelectorAll('.filter-bar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#missionGrid .card').forEach(c=>{
+    if(cat==='all') c.style.display='flex';
+    else if(cat==='dock') c.style.display = c.dataset.cat==='dock' ? 'flex' : 'none';
+    else if(cat==='coop') c.style.display = c.dataset.cat==='coop' ? 'flex' : 'none';
+    else if(cat==='easy') c.style.display = c.dataset.cat==='easy' ? 'flex' : 'none';
+    else c.style.display='flex';
+  });
+}
+
+// Drive gallery
+const driveIdInput=document.getElementById('driveIdInput');
+const galleryWrap=document.getElementById('galleryWrap');
+const driveDirectLink=document.getElementById('driveDirectLink');
+const driveOpenBtn=document.getElementById('driveOpenBtn');
+
+function extractDriveId(value){
+  if(!value) return '';
+  const m = value.match(/folders\/([a-zA-Z0-9_-]+)/);
+  if(m) return m[1];
+  // also handle ?id= or /d/ patterns
+  const m2 = value.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if(m2) return m2[1];
+  if(/^[a-zA-Z0-9_-]+$/.test(value.trim())) return value.trim();
+  return '';
+}
+
+function updateGallery(id){
+  const embedUrl = `https://drive.google.com/embeddedfolderview?id=${encodeURIComponent(id)}#grid`;
+  const directUrl = `https://drive.google.com/drive/folders/${encodeURIComponent(id)}?usp=sharing`;
+  if(driveDirectLink){ driveDirectLink.href = directUrl; driveDirectLink.textContent = directUrl; }
+  if(driveOpenBtn) driveOpenBtn.href = directUrl;
+  galleryWrap.innerHTML='';
+  const ifr=document.createElement('iframe');
+  ifr.src = embedUrl;
+  ifr.style.width='100%'; ifr.style.height='420px'; ifr.frameBorder='0';
+  ifr.style.display='block';
+  ifr.loading='lazy';
+  ifr.referrerPolicy='no-referrer';
+  ifr.title='Google Drive folder';
+  galleryWrap.appendChild(ifr);
+}
+
+document.getElementById('setDriveBtn').addEventListener('click',()=>{
+  const raw=driveIdInput.value.trim();
+  const id=extractDriveId(raw);
+  if(!id){ galleryWrap.innerHTML='<div style="height:200px;display:flex;align-items:center;justify-content:center;color:#ef4444">Invalid Drive folder ID or URL</div>'; return; }
+  updateGallery(id);
+});
+
+// keep direct link in sync while typing
+driveIdInput.addEventListener('input', ()=>{
+  const id=extractDriveId(driveIdInput.value.trim());
+  if(id && driveDirectLink){
+    const directUrl = `https://drive.google.com/drive/folders/${encodeURIComponent(id)}?usp=sharing`;
+    driveDirectLink.href = directUrl;
+    driveDirectLink.textContent = directUrl;
+    if(driveOpenBtn) driveOpenBtn.href = directUrl;
+  }
+});
+</script>
 </body>
 </html>
